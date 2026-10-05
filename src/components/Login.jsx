@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase, toEmail } from '../lib/supabase'
+import Logo from './Logo'
 
 export default function Login() {
   const [user, setUser] = useState('')
@@ -23,9 +24,8 @@ export default function Login() {
     <div className="min-h-screen grid place-items-center p-6">
       <form onSubmit={submit} className="w-full max-w-sm space-y-4">
         <div className="text-center mb-8">
-          <img src="/icon.svg" alt="" className="w-20 h-20 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white">Academia Tracker</h1>
-          <p className="text-slate-400 text-sm mt-1">Progreso de grabación</p>
+          <h1 className="sr-only">Academia Tracker</h1>
+          <Logo />
         </div>
         <input
           className="w-full rounded-xl bg-slate-900 border border-slate-800 px-4 py-3 text-white placeholder-slate-500 outline-none focus:border-emerald-500"

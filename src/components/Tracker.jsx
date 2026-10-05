@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { STATUSES } from '../lib/status'
+import Logo from './Logo'
 import Progress from './Progress'
 import VideoRow from './VideoRow'
 import AddModal from './AddModal'
@@ -130,8 +131,10 @@ export default function Tracker({ session }) {
     <div className="min-h-screen text-slate-100">
       <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-slate-900 pt-[env(safe-area-inset-top)]">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          <img src="/icon.svg" alt="" className="w-8 h-8" />
-          <h1 className="font-bold text-lg flex-1">Academia Tracker</h1>
+          <h1 className="flex-1">
+            <span className="sr-only">Academia Tracker</span>
+            <Logo size="sm" />
+          </h1>
           <button
             onClick={() => supabase.auth.signOut()}
             className="text-sm text-slate-400 hover:text-white"
