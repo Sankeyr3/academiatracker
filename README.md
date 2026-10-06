@@ -11,15 +11,6 @@ npm install
 npm run dev
 ```
 
-## Supabase
+## Despliegue
 
-1. Ejecuta `supabase/schema.sql` en el SQL Editor.
-2. Authentication → Sign In / Providers → desactiva "Allow new users to sign up".
-3. Authentication → Users → Add user → Create new user, con email `usuario@academia.app`
-   (o el dominio de `VITE_USERNAME_DOMAIN`) y marca "Auto Confirm User".
-   En la app se entra escribiendo solo `usuario`.
-
-## Vercel
-
-Importa el repo (framework: Vite) y añade las variables `VITE_SUPABASE_URL`,
-`VITE_SUPABASE_ANON_KEY` y opcionalmente `VITE_USERNAME_DOMAIN`.
+Ver [DEPLOY.md](DEPLOY.md): configuración de Supabase, Vercel e instalación en el móvil.

@@ -1,4 +1,5 @@
 import { STATUS, STATUSES } from '../lib/status'
+import { fmtHours } from '../lib/hours'
 
 export default function VideoRow({ video, onStatus, onEdit, onUp, onDown }) {
   const s = STATUS[video.status]
@@ -15,6 +16,8 @@ export default function VideoRow({ video, onStatus, onEdit, onUp, onDown }) {
         </div>
         {video.notes && <div className="truncate text-xs text-slate-500">{video.notes}</div>}
       </button>
+
+      <span className="shrink-0 text-xs tabular-nums text-slate-500">{fmtHours(video.hours)}</span>
 
       <div className={`relative shrink-0 rounded-full ring-1 ${s.pill}`}>
         <select

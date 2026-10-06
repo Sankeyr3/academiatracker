@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { STATUSES } from '../lib/status'
+import { fmtHours, sumHours } from '../lib/hours'
 import Logo from './Logo'
 import Progress from './Progress'
 import VideoRow from './VideoRow'
@@ -67,9 +68,9 @@ export default function Tracker({ session }) {
       supabase.from('videos').delete().eq('id', id),
     )
 
-  async function addVideos(module, titles) {
+  async function addVideos(module, titles, hours) {
     const maxPos = videos.reduce((m, v) => Math.max(m, v.position), 0)
-    const rows = titles.map((title, i) => ({ title, module, position: maxPos + i + 1 }))
+    const rows = titles.map((title, i) => ({ title, module, hours, position: maxPos + i + 1 }))
     const { error } = await supabase.from('videos').insert(rows)
     if (error) setError(error.message)
     load()
@@ -127,6 +128,12 @@ export default function Tracker({ session }) {
     return c
   }, [videos])
 
+  const hoursByStatus = useMemo(() => {
+    const h = Object.fromEntries(STATUSES.map((s) => [s.id, 0]))
+    videos.forEach((v) => (h[v.status] += Number(v.hours || 0)))
+    return h
+  }, [videos])
+
   return (
     <div className="min-h-screen text-slate-100">
       <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-slate-900 pt-[env(safe-area-inset-top)]">
@@ -146,7 +153,7 @@ export default function Tracker({ session }) {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 pb-28 pt-4 space-y-4">
-        <Progress counts={counts} total={videos.length} />
+        <Progress hours={hoursByStatus} total={sumHours(videos)} />
 
         <div className="space-y-3">
           <input
@@ -193,13 +200,13 @@ export default function Tracker({ session }) {
           <p className="text-center text-slate-500 py-12">Nada coincide con el filtro.</p>
         ) : (
           groups.map((g) => {
-            const done = g.all.filter((v) => v.status === 'editado').length
+            const done = sumHours(g.all.filter((v) => v.status === 'editado'))
             return (
               <section key={g.module} className="space-y-2">
                 <div className="flex items-baseline justify-between px-1 pt-2">
                   <h2 className="font-semibold text-slate-200">{g.module || 'Sin módulo'}</h2>
                   <span className="text-xs text-slate-500">
-                    {done}/{g.all.length} terminados
+                    {fmtHours(done)} / {fmtHours(sumHours(g.all))} terminadas
                   </span>
                 </div>
                 <ul className="rounded-2xl bg-slate-900/60 border border-slate-800/80 divide-y divide-slate-800/80 overflow-hidden">

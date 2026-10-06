@@ -4,6 +4,7 @@ import Modal, { inputCls } from './Modal'
 export default function AddModal({ modules, onClose, onAdd }) {
   const [module, setModule] = useState(modules.at(-1) ?? '')
   const [text, setText] = useState('')
+  const [hours, setHours] = useState('')
   const [saving, setSaving] = useState(false)
 
   const titles = text
@@ -15,7 +16,7 @@ export default function AddModal({ modules, onClose, onAdd }) {
     e.preventDefault()
     if (!titles.length) return
     setSaving(true)
-    await onAdd(module.trim(), titles)
+    await onAdd(module.trim(), titles, Number(hours) || 0)
     onClose()
   }
 
@@ -45,6 +46,19 @@ export default function AddModal({ modules, onClose, onAdd }) {
             onChange={(e) => setText(e.target.value)}
             placeholder={'Introducción\nNotación\nLa cruz blanca'}
             autoFocus
+          />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs text-slate-400">Horas de grabación (cada vídeo)</span>
+          <input
+            className={inputCls}
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
+            placeholder="Ej. 1 (21 algoritmos ≈ 1 h)"
           />
         </label>
         <button

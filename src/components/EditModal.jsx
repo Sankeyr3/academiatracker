@@ -7,11 +7,12 @@ export default function EditModal({ video, modules, onClose, onSave, onDelete })
   const [module, setModule] = useState(video.module)
   const [notes, setNotes] = useState(video.notes)
   const [status, setStatus] = useState(video.status)
+  const [hours, setHours] = useState(String(video.hours ?? 0))
 
   function submit(e) {
     e.preventDefault()
     if (!title.trim()) return
-    onSave({ title: title.trim(), module: module.trim(), notes: notes.trim(), status })
+    onSave({ title: title.trim(), module: module.trim(), notes: notes.trim(), status, hours: Number(hours) || 0 })
     onClose()
   }
 
@@ -37,6 +38,18 @@ export default function EditModal({ video, modules, onClose, onSave, onDelete })
               <option key={m} value={m} />
             ))}
           </datalist>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs text-slate-400">Horas de grabación</span>
+          <input
+            className={inputCls}
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
+          />
         </label>
         <div className="space-y-1">
           <span className="text-xs text-slate-400">Estado</span>
